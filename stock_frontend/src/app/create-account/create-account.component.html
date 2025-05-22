@@ -1,0 +1,64 @@
+<div class="container">
+  <h1>Create an Account</h1>
+  
+  <form [formGroup]="createAccountForm" (ngSubmit)="onSubmit()">
+      <!-- Username Input -->
+      <input 
+          type="text" 
+          formControlName="username" 
+          placeholder="Username"
+          [ngClass]="{'invalid': createAccountForm.get('username')?.touched && createAccountForm.get('username')?.invalid}">
+      
+      <div *ngIf="createAccountForm.get('username')?.touched && createAccountForm.get('username')?.invalid" class="error-message">
+          <span *ngIf="createAccountForm.get('username')?.errors?.['required']">Username is required</span>
+          <span *ngIf="createAccountForm.get('username')?.errors?.['minlength']">Username must be at least 3 characters</span>
+      </div>
+
+      <!-- Email Input -->
+      <input 
+          type="email" 
+          formControlName="email" 
+          placeholder="Email"
+          [ngClass]="{'invalid': createAccountForm.get('email')?.touched && createAccountForm.get('email')?.invalid}">
+      
+      <div *ngIf="createAccountForm.get('email')?.touched && createAccountForm.get('email')?.invalid" class="error-message">
+          <span *ngIf="createAccountForm.get('email')?.errors?.['required']">Email is required</span>
+          <span *ngIf="createAccountForm.get('email')?.errors?.['email']">Please enter a valid email</span>
+      </div>
+
+      <!-- Password Input -->
+      <input 
+          type="password" 
+          formControlName="password" 
+          placeholder="Password"
+          [ngClass]="{'invalid': createAccountForm.get('password')?.touched && createAccountForm.get('password')?.invalid}">
+      
+      <div *ngIf="createAccountForm.get('password')?.touched && createAccountForm.get('password')?.invalid" class="error-message">
+          <span *ngIf="createAccountForm.get('password')?.errors?.['required']">Password is required</span>
+          <span *ngIf="createAccountForm.get('password')?.errors?.['minlength']">Password must be at least 6 characters</span>
+      </div>
+
+      <!-- Confirm Password Input -->
+      <input 
+          type="password" 
+          formControlName="confirmPassword" 
+          placeholder="Confirm Password"
+          [ngClass]="{'invalid': (createAccountForm.get('confirmPassword')?.touched && createAccountForm.get('confirmPassword')?.invalid) || createAccountForm.hasError('passwordMismatch')}">
+      
+      <div *ngIf="createAccountForm.get('confirmPassword')?.touched" class="error-message">
+          <span *ngIf="createAccountForm.get('confirmPassword')?.errors?.['required']">Please confirm your password</span>
+          <span *ngIf="createAccountForm.hasError('passwordMismatch')">Passwords do not match</span>
+      </div>
+
+      <!-- Role Select -->
+      <select formControlName="role">
+          <option value="user">User</option>
+          <option value="admin">Admin</option>
+      </select>
+
+      <!-- Submit Button -->
+      <button type="submit" [disabled]="createAccountForm.invalid">Register</button>
+  </form>
+
+  <p>Already have an account? <a routerLink="/login">Login</a></p>
+</div>

@@ -1,0 +1,33 @@
+<h2 mat-dialog-title>Adjust Stock</h2>
+<mat-dialog-content>
+  <form #adjustForm="ngForm">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Current Stock</mat-label>
+      <input matInput [value]="data.currentStock" disabled>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Adjustment Type</mat-label>
+      <mat-select name="type" [(ngModel)]="adjustment.type" required>
+        <mat-option value="add">Add to Stock</mat-option>
+        <mat-option value="remove">Remove from Stock</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Quantity</mat-label>
+      <input matInput type="number" name="quantity" [(ngModel)]="adjustment.quantity" min="1" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Reason</mat-label>
+      <input matInput name="reason" [(ngModel)]="adjustment.reason" placeholder="Optional">
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="onSave()" [disabled]="!adjustForm.valid">
+    Save Adjustment
+  </button>
+</mat-dialog-actions>

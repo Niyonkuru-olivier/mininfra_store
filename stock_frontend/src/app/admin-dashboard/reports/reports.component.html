@@ -1,0 +1,116 @@
+<div class="reports-container">
+  <div class="reports-header">
+    <h2>Reports</h2>
+    <div class="report-controls">
+      <mat-form-field>
+        <mat-label>Report Type</mat-label>
+        <mat-select [(ngModel)]="selectedReportType" (selectionChange)="loadData()">
+          <mat-option value="inventory">Inventory Report</mat-option>
+          <mat-option value="asset">Asset Report</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Format</mat-label>
+        <mat-select [(ngModel)]="selectedFormat">
+          <mat-option *ngFor="let format of formatOptions" [value]="format.value">
+            {{format.label}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <form [formGroup]="dateRange" class="date-range">
+        <mat-form-field>
+          <mat-label>Start Date</mat-label>
+          <input matInput [matDatepicker]="startPicker" formControlName="start" required>
+          <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+          <mat-datepicker #startPicker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>End Date</mat-label>
+          <input matInput [matDatepicker]="endPicker" formControlName="end" required>
+          <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+          <mat-datepicker #endPicker></mat-datepicker>
+        </mat-form-field>
+      </form>
+
+      <button mat-raised-button color="primary" (click)="generateReport()" 
+              [disabled]="!dateRange.valid || selection.selected.length === 0">
+        Generate Report
+      </button>
+    </div>
+  </div>
+
+  <div class="table-container">
+    <table mat-table [dataSource]="dataSource" matSort>
+      <!-- Checkbox Column -->
+      <ng-container matColumnDef="select">
+        <th mat-header-cell *matHeaderCellDef>
+          <mat-checkbox (change)="$event ? toggleAllRows() : null"
+                       [checked]="selection.hasValue() && isAllSelected()"
+                       [indeterminate]="selection.hasValue() && !isAllSelected()">
+          </mat-checkbox>
+        </th>
+        <td mat-cell *matCellDef="let row">
+          <mat-checkbox (click)="$event.stopPropagation()"
+                       (change)="$event ? selection.toggle(row) : null"
+                       [checked]="selection.isSelected(row)">
+          </mat-checkbox>
+        </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+        <td mat-cell *matCellDef="let row">{{row.name}}</td>
+      </ng-container>
+
+      <!-- Description Column -->
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Description</th>
+        <td mat-cell *matCellDef="let row">{{row.description}}</td>
+      </ng-container>
+
+      <!-- SKU Column -->
+      <ng-container matColumnDef="sku">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>SKU</th>
+        <td mat-cell *matCellDef="let row">{{row.sku}}</td>
+      </ng-container>
+
+      <!-- Quantity In Column -->
+      <ng-container matColumnDef="qtyIn">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Quantity In</th>
+        <td mat-cell *matCellDef="let row">{{row.qtyIn}}</td>
+      </ng-container>
+
+      <!-- Quantity Out Column -->
+      <ng-container matColumnDef="qtyOut">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Quantity Out</th>
+        <td mat-cell *matCellDef="let row">{{row.qtyOut}}</td>
+      </ng-container>
+
+      <!-- Balance Column -->
+      <ng-container matColumnDef="balance">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Balance</th>
+        <td mat-cell *matCellDef="let row">{{row.balance}}</td>
+      </ng-container>
+
+      <!-- Unit Price Column -->
+      <ng-container matColumnDef="unitPrice">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Unit Price</th>
+        <td mat-cell *matCellDef="let row">{{row.unitPrice | currency}}</td>
+      </ng-container>
+
+      <!-- Total Price Column -->
+      <ng-container matColumnDef="totalPrice">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Total Price</th>
+        <td mat-cell *matCellDef="let row">{{row.totalPrice | currency}}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+</div>
+  

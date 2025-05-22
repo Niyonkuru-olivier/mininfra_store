@@ -1,0 +1,43 @@
+<div class="login-container">
+  <h2>Login</h2>
+  <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+    <input 
+      type="email" 
+      [(ngModel)]="email" 
+      name="email" 
+      placeholder="Enter your email" 
+      required>
+
+    <input 
+      type="password" 
+      [(ngModel)]="password" 
+      name="password" 
+      placeholder="Enter your password" 
+      required>
+
+    <select [(ngModel)]="role" name="role">
+      <option value="user">User</option>
+      <option value="admin">Admin</option>
+    </select>
+
+    <button type="submit">Login</button>
+    <button type="button" (click)="openForgotPassword()">Forgot Password?</button>
+
+    <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+    <p *ngIf="successMessage" class="success">{{ successMessage }}</p>
+  </form>
+
+  <div *ngIf="showForgotPassword">
+    <h3>Reset Password</h3>
+    <form (ngSubmit)="submitForgotPassword()" #forgotForm="ngForm">
+      <input 
+        type="email" 
+        [(ngModel)]="forgotEmail" 
+        name="forgotEmail" 
+        placeholder="Enter your registered email" 
+        required>
+      <button type="submit">Send Reset Link</button>
+    </form>
+    <button type="button" (click)="cancelForgotPassword()">Cancel</button>
+  </div>
+</div>

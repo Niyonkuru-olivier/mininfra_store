@@ -1,0 +1,38 @@
+<div class="dashboard">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <h2>Stock System</h2>
+      <p>User Dashboard</p>
+    </div>
+    <div class="sidebar-menu">
+      <div class="menu-item" routerLinkActive="active" [routerLink]="['dashboard1']">
+        <mat-icon>dashboard</mat-icon>
+        <span>Dashboard</span>
+      </div>
+      <div class="menu-item" routerLinkActive="active" [routerLink]="['asset']">
+        <mat-icon>devices_other</mat-icon>
+        <span>Asset Management</span>
+      </div>
+      <div class="menu-item" routerLinkActive="active" [routerLink]="['inventory']">
+        <mat-icon>inventory</mat-icon>
+        <span>Inventory Management</span>
+      </div>
+      <div class="menu-item" routerLinkActive="active" [routerLink]="['report1']">
+        <mat-icon>assessment</mat-icon>
+        <span>Reports</span>
+      </div>
+      
+      <div class="menu-item" (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        <span>Logout</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Header -->
+    <router-outlet></router-outlet>
+
+    

@@ -1,0 +1,36 @@
+.container {
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.table-container {
+  overflow-x: auto;
+  border-radius: 4px;
+}
+
+.full-width-table {
+  width: 100%;
+}
+
+.no-data {
+  padding: 20px;
+  text-align: center;
+  color: #666;
+  font-style: italic;
+}
+
+.search-bar {
+  width: 300px;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.actions button {
+  margin-right: 8px;
+}

@@ -1,0 +1,56 @@
+<h2 mat-dialog-title>{{ isEditing ? 'Edit Item' : 'Add New Item' }}</h2>
+<mat-dialog-content>
+  <form #itemForm="ngForm">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Item Name</mat-label>
+      <input matInput name="name" [(ngModel)]="item.name" required>
+    </mat-form-field>
+
+    <!--<mat-form-field appearance="outline" class="full-width">
+      <mat-label>SKU (Code)</mat-label>
+      <input matInput name="sku" [(ngModel)]="item.sku" required>
+    </mat-form-field>-->
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Condition</mat-label>
+      <mat-select name="condition" [(ngModel)]="item.condition" required>
+        <mat-option *ngFor="let cond of conditions" [value]="cond">{{ cond }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Description</mat-label>
+      <textarea matInput name="description" [(ngModel)]="item.description" rows="3"></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Quantity In</mat-label>
+      <input matInput type="number" name="qtyIn" [(ngModel)]="item.qtyIn" min="0" required>
+    </mat-form-field>
+
+     <mat-form-field appearance="outline" class="full-width">
+  <mat-label>Stock Threshold</mat-label>
+  <input matInput type="number" name="threshold" [(ngModel)]="item.threshold" min="0" required>
+</mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Unit Price</mat-label>
+      <input matInput type="number" name="unitPrice" [(ngModel)]="item.unitPrice" min="0" required>
+      <span matSuffix>RWF</span>
+    </mat-form-field>
+
+    <!-- Read-only fields for editing mode -->
+    <div *ngIf="isEditing" class="info-section">
+      <p><strong>Balance Quantity:</strong> {{item.qtyIn - item.qtyOut}}</p>
+      <p><strong>Total Price:</strong>{{(item.qtyIn - item.qtyOut) * item.unitPrice}}RWF</p>
+    </div>
+   
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="onSave()" [disabled]="!itemForm.valid">
+    {{ isEditing ? 'Update' : 'Save' }} Item
+  </button>
+</mat-dialog-actions>

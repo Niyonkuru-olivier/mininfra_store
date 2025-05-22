@@ -1,0 +1,47 @@
+<h2 mat-dialog-title>{{ isEdit ? 'Edit User' : 'Add New User' }}</h2>
+
+<mat-dialog-content>
+  <!-- Step Navigation -->
+  <div class="steps">
+    <div class="step" [class.active]="currentStep === 1" (click)="showStep(1)">Basic Info</div>
+    <div class="step" [class.active]="currentStep === 2" (click)="showStep(2)">Role</div>
+  </div>
+
+  <!-- Step 1: Basic Info -->
+  <div *ngIf="currentStep === 1">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Full Name</mat-label>
+      <input matInput [(ngModel)]="user.name" placeholder="Enter full name" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Email</mat-label>
+      <input matInput type="email" [(ngModel)]="user.email" placeholder="Enter email" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Password</mat-label>
+      <input matInput type="password" [(ngModel)]="user.password" placeholder="Enter password" [required]="!isEdit" />
+    </mat-form-field>
+  </div>
+
+  <!-- Step 2: Role -->
+  <div *ngIf="currentStep === 2">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>User Role</mat-label>
+      <mat-select [(ngModel)]="user.role" required>
+        <mat-option value="">Select Role</mat-option>
+        <mat-option value="admin">Admin</mat-option>
+        
+        <mat-option value="user">User</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="prevStep()" *ngIf="currentStep > 1">Previous</button>
+  <button mat-raised-button color="primary" (click)="nextStep()">
+    {{ currentStep === 2 ? (isEdit ? 'Update' : 'Create') : 'Next' }}
+  </button>
+</mat-dialog-actions>
