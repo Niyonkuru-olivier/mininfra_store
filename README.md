@@ -48,9 +48,24 @@ A full-stack inventory management system built with Angular and NestJS.
    ```
 
 ### Backend Setup
+   ### Backend for User
 1. Navigate to the backend directory:
    ```bash
    cd backend
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Configure your database connection in `.env`
+4. Start the development server:
+   ```bash
+   npm run start:dev
+   ```
+   ### Backend for others
+1. Navigate to the backend directory:
+   ```bash
+   cd stock_backend
    ```
 2. Install dependencies:
    ```bash
