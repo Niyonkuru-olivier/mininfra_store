@@ -22,6 +22,8 @@ import { AddItemDialogComponent } from '../add-item-dialog/add-item-dialog.compo
 import { AdjustStockDialogComponent } from '../adjust-stock-dialog/adjust-stock-dialog.component';
 import { ReportDialogComponent } from '../report-dialog/report-dialog.component';
 
+// ...existing imports...
+
 @Component({
   selector: 'app-user-dashboard',
   templateUrl: './dashboard1.component.html',
@@ -56,9 +58,8 @@ import { ReportDialogComponent } from '../report-dialog/report-dialog.component'
 export class UserDashboardComponent implements OnInit {
   totalInventoryItems = 0;
   totalAssetItems = 0;
-  
   lowInventoryStock = 0;
-lowAssetStock = 0;
+  lowAssetStock = 0;
   todaysTransactions = 0;
 
   constructor(
@@ -78,7 +79,7 @@ lowAssetStock = 0;
         this.totalInventoryItems = data.totalInventoryItems ?? 0;
         this.totalAssetItems = data.totalAssetItems ?? 0;
         this.lowAssetStock = data.lowAssetStock ?? 0;
-        this.lowInventoryStock= data.lowInventoryStock ?? 0;
+        this.lowInventoryStock = data.lowInventoryStock ?? 0;
         this.todaysTransactions = data.todaysTransactions ?? 0;
       },
       error: err => {
@@ -94,7 +95,6 @@ lowAssetStock = 0;
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        // Refresh dashboard stats after adding new item
         this.getDashboardStats();
       }
     });
@@ -107,7 +107,6 @@ lowAssetStock = 0;
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        // Refresh dashboard stats after adjusting stock
         this.getDashboardStats();
       }
     });
@@ -123,5 +122,27 @@ lowAssetStock = 0;
     localStorage.removeItem('authToken');
     localStorage.removeItem('userRole');
     this.router.navigate(['/login']);
+  }
+
+  goTo(path: string): void {
+    switch (path) {
+      case 'inventory-items':
+        this.router.navigate(['/user-dashboard/inventory']);
+        break;
+      case 'asset-items':
+        this.router.navigate(['/user-dashboard/asset']);
+        break;
+      case 'low-inventory-items':
+        this.router.navigate(['/user-dashboard/inventory'], { queryParams: { lowStock: true } });
+        break;
+      case 'low-asset-items':
+        this.router.navigate(['/user-dashboard/asset'], { queryParams: { lowStock: true } });
+        break;
+      case 'transactions':
+        this.router.navigate(['/user-dashboard/transactions']);
+        break;
+      default:
+        break;
+    }
   }
 }

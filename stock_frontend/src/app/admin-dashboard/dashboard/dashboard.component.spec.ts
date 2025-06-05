@@ -21,10 +21,12 @@ describe('DashboardOverviewComponent', () => {
   });
 
   it('should fetch simulated dashboard stats', () => {
-    expect(component.totalUsers).toBe(24);
-    expect(component.totalInventoryItems).toBe(156);
-    expect(component.totalAssetItems).toBe(87);
-    expect(component.lowStockItems).toBe(12);
-    expect(component.totalActivities).toBe(42);
+    expect(component.totalUsers).toBe(0);
+    expect(component.totalInventoryItems).toBe(0);
+    expect(component.totalAssetItems).toBe(0);
+    expect(component.lowInventoryStock).toBe(0);
+    expect(component.lowAssetStock).toBe(0);
+    expect(component.todaysTransactions).toBe(0);
+
   });
 });

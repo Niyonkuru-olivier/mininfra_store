@@ -2,7 +2,7 @@
 <div class="main-content">
   <!-- Header -->
   <div class="header">
-    <h1>Inventory Management</h1>
+    <h1>User Dashboard Overview</h1>
     <div class="header-actions">
       <button mat-icon-button class="notification-btn">
         <mat-icon>notifications</mat-icon>
@@ -12,8 +12,8 @@
   </div>
 
   <!-- Stats Cards -->
-  <div class="stats-container">
-    <mat-card class="stat-card">
+  <div class="stats-container dashboard-cards">
+    <a mat-card class="stat-card card" (click)="goTo('inventory-items')">
       <mat-card-header>
         <mat-icon mat-card-avatar>inventory</mat-icon>
         <mat-card-title>Total Inventory Items</mat-card-title>
@@ -22,9 +22,9 @@
         <div class="card-value">{{ totalInventoryItems }}</div>
         <div class="card-subtext">Available</div>
       </mat-card-content>
-    </mat-card>
+    </a>
 
-    <mat-card class="stat-card">
+    <a mat-card class="stat-card card" (click)="goTo('asset-items')">
       <mat-card-header>
         <mat-icon mat-card-avatar>inventory_2</mat-icon>
         <mat-card-title>Total Asset Items</mat-card-title>
@@ -33,34 +33,31 @@
         <div class="card-value">{{ totalAssetItems }}</div>
         <div class="card-subtext">Available</div>
       </mat-card-content>
-    </mat-card>
+    </a>
 
-    
+    <a mat-card class="stat-card card warning" (click)="goTo('low-inventory-items')">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>warning</mat-icon>
+        <mat-card-title>Low Inventory Items</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="card-value">{{ lowInventoryStock }}</div>
+        <div class="card-subtext">Needs attention</div>
+      </mat-card-content>
+    </a>
 
-    <mat-card class="stat-card warning">
-  <mat-card-header>
-    <mat-icon mat-card-avatar>warning</mat-icon>
-    <mat-card-title>Low Inventory Items</mat-card-title>
-  </mat-card-header>
-  <mat-card-content>
-    <div class="card-value">{{ lowInventoryStock }}</div>
-    <div class="card-subtext">Needs attention</div>
-  </mat-card-content>
-</mat-card>
+    <a mat-card class="stat-card card warning" (click)="goTo('low-asset-items')">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>warning</mat-icon>
+        <mat-card-title>Low Asset Items</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="card-value">{{ lowAssetStock }}</div>
+        <div class="card-subtext">Needs attention</div>
+      </mat-card-content>
+    </a>
 
-<mat-card class="stat-card warning">
-  <mat-card-header>
-    <mat-icon mat-card-avatar>warning</mat-icon>
-    <mat-card-title>Low Asset Items</mat-card-title>
-  </mat-card-header>
-  <mat-card-content>
-    <div class="card-value">{{ lowAssetStock }}</div>
-    <div class="card-subtext">Needs attention</div>
-  </mat-card-content>
-</mat-card>
-
-
-    <mat-card class="stat-card">
+    <a mat-card class="stat-card card" (click)="goTo('transaction')">
       <mat-card-header>
         <mat-icon mat-card-avatar>receipt</mat-icon>
         <mat-card-title>Today's Transactions</mat-card-title>
@@ -69,6 +66,6 @@
         <div class="card-value">{{ todaysTransactions }}</div>
         <div class="card-subtext">Movements</div>
       </mat-card-content>
-    </mat-card>
+    </a>
   </div>
 </div>

@@ -8,6 +8,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { AddUserDialogComponent } from '../add-user-dialog/add-user-dialog.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-user-management',
@@ -19,7 +21,9 @@ import { AddUserDialogComponent } from '../add-user-dialog/add-user-dialog.compo
     MatTableModule,
     MatButtonModule,
     MatIconModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatFormFieldModule,
+    MatInputModule
   ],
   templateUrl: './user-management.component.html',
   styleUrls: ['./user-management.component.scss']
@@ -27,6 +31,8 @@ import { AddUserDialogComponent } from '../add-user-dialog/add-user-dialog.compo
 export class UserManagementComponent {
   displayedColumns: string[] = ['name', 'role', 'email', 'password', 'status', 'createdAt', 'actions'];
   users: any[] = [];
+  filteredUsers: any[] = [];
+  searchQuery: string = '';
   private apiUrl = 'http://localhost:3000/user';
 
   constructor(private dialog: MatDialog, private http: HttpClient) {}
@@ -34,7 +40,17 @@ export class UserManagementComponent {
   ngOnInit(): void {
     this.http.get<any[]>(this.apiUrl).subscribe(data => {
       this.users = data;
+      this.filteredUsers = data;
     });
+  }
+
+  applyFilter(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value.toLowerCase();
+    this.filteredUsers = this.users.filter(user => 
+      user.name.toLowerCase().includes(filterValue) ||
+      user.email.toLowerCase().includes(filterValue) ||
+      user.role.toLowerCase().includes(filterValue)
+    );
   }
 
   addUser(): void {

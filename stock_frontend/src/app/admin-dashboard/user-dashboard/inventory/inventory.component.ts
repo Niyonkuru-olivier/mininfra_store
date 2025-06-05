@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
 
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
@@ -25,6 +26,7 @@ interface InventoryItem {
   balanceQty: number;
   unitPrice: number;
   totalPrice?: number; // calculated client-side
+  threshold?: number; // Add threshold field
 }
 
 @Component({
@@ -46,6 +48,16 @@ interface InventoryItem {
   styleUrls: ['./inventory.component.scss']
 })
 export class InventoryComponent implements OnInit {
+  addStock(item: any): void {
+    this.modifyProductQuantity(item, 'add');
+  }
+  removeStock(item: any): void {
+    this.modifyProductQuantity(item, 'remove');
+  }
+
+  modifyProductQuantity(item: InventoryItem, action: 'add' | 'remove'): void {
+    this.openQuantityDialog(item, action);
+  }
   displayedColumns: string[] = [
     'number',
     'name',
@@ -64,11 +76,19 @@ export class InventoryComponent implements OnInit {
   filteredInventory: InventoryItem[] = [];
   searchQuery: string = '';
   private apiUrl = 'http://localhost:3000/inventory';
+  showLowStockOnly: boolean = false;
 
-  constructor(public dialog: MatDialog, private http: HttpClient) {}
+  constructor(
+    public dialog: MatDialog, 
+    private http: HttpClient,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
-    this.loadInventory();
+    this.route.queryParams.subscribe(params => {
+      this.showLowStockOnly = params['lowStock'] === 'true';
+      this.loadInventory();
+    });
   }
 
   loadInventory(): void {
@@ -78,18 +98,35 @@ export class InventoryComponent implements OnInit {
         ...item,
         totalPrice: item.unitPrice * item.balanceQty
       }));
-      this.filteredInventory = [...this.inventory];
+      
+      // Apply low stock filter if needed
+      if (this.showLowStockOnly) {
+        this.filteredInventory = this.inventory.filter(item => 
+          item.balanceQty <= (item.threshold || 10) // Default threshold of 10 if not specified
+        );
+      } else {
+        this.filteredInventory = [...this.inventory];
+      }
     });
   }
 
   filterInventory(): void {
     const query = this.searchQuery.toLowerCase();
-    this.filteredInventory = this.inventory.filter(item =>
+    let filtered = this.inventory.filter(item =>
       item.name.toLowerCase().includes(query) ||
       item.number.toLowerCase().includes(query) ||
      // item.sku.toLowerCase().includes(query) ||
       item.description.toLowerCase().includes(query)
     );
+
+    // Apply low stock filter if needed
+    if (this.showLowStockOnly) {
+      filtered = filtered.filter(item => 
+        item.balanceQty <= (item.threshold || 10)
+      );
+    }
+
+    this.filteredInventory = filtered;
   }
 
   clearSearch(): void {

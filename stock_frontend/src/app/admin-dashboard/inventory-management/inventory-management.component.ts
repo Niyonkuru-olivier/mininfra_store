@@ -9,6 +9,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { ActivatedRoute } from '@angular/router';
 
 import { AddItemDialogComponent } from '../inventory-management/add-item-dialog/add-item-dialog.component';
 
@@ -44,6 +45,7 @@ interface InventoryItem {
   styleUrls: ['./inventory-management.component.scss']
 })
 export class InventoryManagementComponent implements OnInit {
+  
   displayedColumns: string[] = [
     'number',
     'name',
@@ -63,11 +65,17 @@ export class InventoryManagementComponent implements OnInit {
   searchQuery: string = '';
 
   private apiUrl = 'http://localhost:3000/inventory';
+   showLowStockOnly: boolean = false;
 
-  constructor(private dialog: MatDialog, private http: HttpClient) {}
+  constructor(public dialog: MatDialog, 
+    private http: HttpClient,
+    private route: ActivatedRoute) {}
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      this.showLowStockOnly = params['lowStock'] === 'true';
     this.loadInventory();
+  });
   }
 
   loadInventory(): void {
@@ -76,7 +84,13 @@ export class InventoryManagementComponent implements OnInit {
         ...item,
         totalPrice: item.unitPrice * item.balanceQty
       }));
-      this.filteredInventory = [...this.inventory];
+      if (this.showLowStockOnly) {
+        this.filteredInventory = this.inventory.filter(item => 
+          item.balanceQty <= (item.threshold || 10) // Default threshold of 10 if not specified
+        );
+      } else {
+        this.filteredInventory = [...this.inventory];
+      }
     });
   }
 
@@ -87,6 +101,11 @@ export class InventoryManagementComponent implements OnInit {
       item.number.toLowerCase().includes(query) ||
       item.description.toLowerCase().includes(query)
     );
+    if (this.showLowStockOnly){
+      this.filteredInventory = this.filteredInventory.filter(item =>
+        item.balanceQty <= (item.threshold || 10)
+      )
+    }
   }
 
   addInventory(): void {

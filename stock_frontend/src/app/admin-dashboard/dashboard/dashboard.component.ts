@@ -75,15 +75,23 @@ lowAssetStock = 0;
   fetchDashboardStats(): void {
     this.http.get<any>('http://localhost:3000/reports/dashboard-data').subscribe({
       next: data => {
-        this.totalUsers = data.totalUsers ?? 0;
         this.totalInventoryItems = data.totalInventoryItems ?? 0;
         this.totalAssetItems = data.totalAssetItems ?? 0;
-          this.lowInventoryStock = data.lowInventoryStock ?? 0;
+        this.lowInventoryStock = data.lowInventoryStock ?? 0;
         this.lowAssetStock = data.lowAssetStock ?? 0;
         this.todaysTransactions = data.todaysTransactions ?? 0;
       },
       error: err => {
         console.error('Failed to load dashboard stats:', err);
+      }
+    });
+
+    this.http.get<any[]>('http://localhost:3000/user').subscribe({
+      next: users => {
+        this.totalUsers = users.length;
+      },
+      error: err => {
+        console.error('Failed to load users:', err);
       }
     });
   }
@@ -123,4 +131,29 @@ lowAssetStock = 0;
     localStorage.removeItem('userRole');
     this.router.navigate(['/login']);
   }
+goTo(path: string): void {
+    switch (path) {
+      case 'inventory-items':
+        this.router.navigate(['/admin-dashboard/inventory-management']);
+        break;
+      case 'asset-items':
+        this.router.navigate(['/admin-dashboard/asset-management']);
+        break;
+      case 'low-inventory-items':
+        this.router.navigate(['/admin-dashboard/inventory-management'], { queryParams: { lowStock: true } });
+        break;
+      case 'low-asset-items':
+        this.router.navigate(['/admin-dashboard/asset-management'], { queryParams: { lowStock: true } });
+        break;
+        case 'users':
+        this.router.navigate(['/admin-dashboard/user-management']);
+        break;
+      case 'transactions':
+        this.router.navigate(['/admin-dashboard/transactions']);
+        break;
+      default:
+        break;
+    }
+  }
+
 }

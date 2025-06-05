@@ -8,7 +8,6 @@
     --dark: #212529;
   }
 
-  
   /* Main Content Styles */
   .main-content {
     padding: 20px;
@@ -54,50 +53,53 @@
   /* Stats Cards */
   .stats-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 15px;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); // Increased min width
+    gap: 0px; // Increased gap
     margin-bottom: 20px;
   }
   
   .stat-card {
-    border-radius: 8px;
+    border-radius: 12px; // Slightly larger radius
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    min-height: 20px; // Increased height
+    padding: 1.5rem 1rem; // Increased padding
+    font-size: 1.25rem; // Slightly larger font
   }
   
   .stat-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.12);
   }
   
   .stat-card.warning {
-    border-left: 4px solid #f8961e;
+    border-left: 6px solid #f8961e;
   }
   
   .mat-card-header {
-    padding-bottom: 12px;
+    padding-bottom: 18px;
     border-bottom: 1px solid #eee;
   }
   
   .mat-card-content {
-    padding-top: 16px;
+    padding-top: 24px;
   }
   
   .card-value {
-    font-size: 1.8rem;
+    font-size: 1.6rem; // Larger value
     font-weight: bold;
     color: #212529;
-    margin: 5px 0;
+    margin: 10px 0;
   }
   
   .card-subtext {
-    font-size: 0.8rem;
+    font-size: 1.1rem;
     color: #6c757d;
   }
   
   /* Inventory and Transactions Cards */
   .inventory-card, .transactions-card {
-    margin-bottom: 20px;
-    border-radius: 8px;
+    margin-bottom: 24px;
+    border-radius: 12px;
   }
   
   .card-actions {
@@ -149,7 +151,7 @@
   
   @media (max-width: 480px) {
     .stats-container {
-      grid-template-columns: 1fr;
+      grid-template-columns: 01fr;
     }
     
     .card-actions {

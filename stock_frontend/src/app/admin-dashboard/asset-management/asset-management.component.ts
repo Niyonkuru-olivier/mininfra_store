@@ -9,6 +9,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { AddItemDialogComponent } from '../asset-management/add-item-dialog/add-item-dialog.component';
+import { ActivatedRoute } from '@angular/router';
 
 interface AssetItem {
   id: number;
@@ -22,7 +23,7 @@ interface AssetItem {
   balance_qty: number;
   unit_price: number;
   total_price: number;
-  threshold: number; // ➕ NEW: low stock threshold
+  threshold: number;
 }
 
 @Component({
@@ -60,13 +61,22 @@ export class AssetManagementComponent implements OnInit {
   assets: AssetItem[] = [];
   filteredAssets: AssetItem[] = [];
   searchQuery: string = '';
+  showLowStockOnly: boolean = false;
 
   private apiUrl = 'http://localhost:3000/assets';
 
-  constructor(private dialog: MatDialog, private http: HttpClient) {}
+  constructor(
+    private dialog: MatDialog,
+    private http: HttpClient,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
-    this.loadAssets();
+    // Check if route has lowStock query param
+    this.route.queryParams.subscribe(params => {
+      this.showLowStockOnly = params['lowStock'] === 'true';
+      this.loadAssets();
+    });
   }
 
   loadAssets(): void {
@@ -75,18 +85,30 @@ export class AssetManagementComponent implements OnInit {
         ...asset,
         total_price: asset.unit_price * asset.balance_qty
       }));
-      this.filteredAssets = [...this.assets];
+      if (this.showLowStockOnly) {
+        this.filteredAssets = this.assets.filter(asset =>
+          asset.balance_qty <= (asset.threshold || 10)
+        );
+      } else {
+        this.filteredAssets = [...this.assets];
+      }
     });
   }
 
   filterAssets(): void {
     const query = this.searchQuery.toLowerCase();
-    this.filteredAssets = this.assets.filter(asset =>
+    let filtered = this.assets.filter(asset =>
       asset.name.toLowerCase().includes(query) ||
       asset.number.toLowerCase().includes(query) ||
       asset.sku.toLowerCase().includes(query) ||
       asset.description.toLowerCase().includes(query)
     );
+    if (this.showLowStockOnly) {
+      filtered = filtered.filter(asset =>
+        asset.balance_qty <= (asset.threshold || 10)
+      );
+    }
+    this.filteredAssets = filtered;
   }
 
   addAsset(): void {
@@ -122,7 +144,8 @@ export class AssetManagementComponent implements OnInit {
         qtyIn: asset.qty_in,
         qtyOut: asset.qty_out,
         unitPrice: asset.unit_price,
-        totalPrice: asset.total_price
+        totalPrice: asset.total_price,
+        threshold: asset.threshold
       }
     };
 
@@ -140,7 +163,8 @@ export class AssetManagementComponent implements OnInit {
           condition: result.condition,
           qty_in: result.qtyIn,
           qty_out: result.qtyOut,
-          unit_price: result.unitPrice
+          unit_price: result.unitPrice,
+          threshold: result.threshold
         };
 
         this.http.put(`${this.apiUrl}/${asset.id}`, updatePayload).subscribe(() => {

@@ -27,7 +27,12 @@ const routes: Routes = [
       { path: 'inventory-management', component: InventoryManagementComponent },
       { path: 'asset-management', component: AssetManagementComponent },
       { path: 'user-management', component: UserManagementComponent },
-      { path: 'reports', component: ReportsComponent }
+      { path: 'reports', component: ReportsComponent },
+
+      
+      { path: 'low-inventory-items', component: InventoryManagementComponent, data: { lowStock: true } },
+      { path: 'low-asset-items', component: AssetManagementComponent, data: { lowStock: true } },
+      
     ]
   },
   { path: '**', redirectTo: '' } // Ensure this is the last route

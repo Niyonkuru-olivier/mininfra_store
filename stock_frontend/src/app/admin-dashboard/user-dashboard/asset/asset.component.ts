@@ -8,6 +8,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
+import { ActivatedRoute } from '@angular/router';
 import { AddStockDialogComponent } from './add-stock-dialog/add-stock-dialog.component';
 
 interface AssetItem {
@@ -22,6 +23,7 @@ interface AssetItem {
   balance_qty: number;
   unit_price: number;
   total_price?: number; // optional, we compute it ourselves
+  threshold?: number; // Add threshold field
 }
 
 @Component({
@@ -61,11 +63,19 @@ export class AssetComponent implements OnInit {
   filteredAssets: AssetItem[] = [];
   searchQuery: string = '';
   private apiUrl = 'http://localhost:3000/assets';
+  showLowStockOnly: boolean = false;
 
-  constructor(private dialog: MatDialog, private http: HttpClient) {}
+  constructor(
+    private dialog: MatDialog, 
+    private http: HttpClient,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
-    this.loadAssets();
+    this.route.queryParams.subscribe(params => {
+      this.showLowStockOnly = params['lowStock'] === 'true';
+      this.loadAssets();
+    });
   }
 
   loadAssets(): void {
@@ -75,18 +85,40 @@ export class AssetComponent implements OnInit {
         ...asset,
         total_price: asset.unit_price * asset.balance_qty
       }));
-      this.filteredAssets = [...this.assets];
+
+      // Apply low stock filter if needed
+      if (this.showLowStockOnly) {
+        this.filteredAssets = this.assets.filter(asset => 
+          asset.balance_qty <= (asset.threshold || 10) // Default threshold of 10 if not specified
+        );
+      } else {
+        this.filteredAssets = [...this.assets];
+      }
     });
   }
 
   filterAssets(): void {
     const query = this.searchQuery.toLowerCase();
-    this.filteredAssets = this.assets.filter(asset =>
+    let filtered = this.assets.filter(asset =>
       asset.name.toLowerCase().includes(query) ||
       asset.number.toLowerCase().includes(query) ||
       asset.sku.toLowerCase().includes(query) ||
       asset.description.toLowerCase().includes(query)
     );
+
+    // Apply low stock filter if needed
+    if (this.showLowStockOnly) {
+      filtered = filtered.filter(asset => 
+        asset.balance_qty <= (asset.threshold || 10)
+      );
+    }
+
+    this.filteredAssets = filtered;
+  }
+
+  clearSearch(): void {
+    this.searchQuery = '';
+    this.filterAssets();
   }
 
   openAddRemoveDialog(asset: AssetItem, action: 'add' | 'remove'): void {

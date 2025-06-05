@@ -52,7 +52,7 @@ describe('InventoryComponent', () => {
         number: 'INV001',
         name: 'Chair',
         description: 'Wooden chair',
-        sku: 'CH001',
+        
         condition: 'Good' as 'Good',
         qtyIn: 10,
         qtyOut: 2,
@@ -65,7 +65,7 @@ describe('InventoryComponent', () => {
         number: 'INV002',
         name: 'Table',
         description: 'Metal table',
-        sku: 'TB001',
+        
         condition: 'Fair' as 'Fair',
         qtyIn: 5,
         qtyOut: 1,

@@ -27,12 +27,12 @@ describe('Report1Component', () => {
   it('should toggle select all checkboxes for inventory items', () => {
     component.selectAllInventory = true;
     component.toggleSelectAll('inventory');
-    expect(component.selectedInventoryItems.every(item => item)).toBeTrue();
+    expect(component.selectedInventoryIds.every(item => item)).toBeTrue();
   });
 
   it('should toggle select all checkboxes for asset items', () => {
     component.selectAllAssets = true;
     component.toggleSelectAll('asset');
-    expect(component.selectedAssetItems.every(item => item)).toBeTrue();
+    expect(component.selectedAssetIds.every(item => item)).toBeTrue();
   });
 });

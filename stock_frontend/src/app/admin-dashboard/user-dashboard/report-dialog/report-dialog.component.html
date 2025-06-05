@@ -5,10 +5,11 @@
     <mat-form-field>
       <mat-label>Report Type</mat-label>
       <mat-select [(ngModel)]="report.type" name="type" (selectionChange)="onTypeChange()">
-        <mat-option value="daily">Daily</mat-option>
+        <mat-option value="custom">Daily</mat-option>
+        <!--<mat-option value="daily">Daily</mat-option>-->
         <mat-option value="weekly">Weekly</mat-option>
         <mat-option value="monthly">Monthly</mat-option>
-        <mat-option value="custom">Custom Range</mat-option>
+        
       </mat-select>
     </mat-form-field>
 

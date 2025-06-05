@@ -49,6 +49,8 @@ interface ReportData {
   providers: [ReportsService, HttpClient]
 })
 export class ReportsComponent implements OnInit, AfterViewInit {
+  filters: { startDate: Date; endDate: Date } = { startDate: new Date(), endDate: new Date() };
+  filteredUsers: any[] = [];
   displayedColumns: string[] = [
     'select',
     'name',
