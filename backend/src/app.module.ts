@@ -14,7 +14,7 @@ import { User } from './users/user.entity';
       port: parseInt(process.env.DB_PORT || '3306'), // Parse port from environment variable
       username: process.env.DB_USERNAME || 'root', // Use environment variable or default
       password: process.env.DB_PASSWORD || 'password', // Use environment variable or default
-      database: process.env.DB_NAME || 'test', // Use environment variable or default
+      database: process.env.DB_NAME || 'MININFRA', // Use environment variable or default
       entities: [User], // Entities to be loaded
       synchronize: false, // Set to false in production
     }),

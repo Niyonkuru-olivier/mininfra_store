@@ -21,9 +21,9 @@ import { ReportsModule } from './reports/reports.module';
         type: 'mysql',
         host: config.get<string>('DB_HOST', 'localhost'),
         port: config.get<number>('DB_PORT', 3306),
-        username: config.get<string>('DB_USERNAME', 'your_mysql_user'),
-        password: config.get<string>('DB_PASSWORD', 'your_mysql_password'),
-        database: config.get<string>('DB_NAME', 'your_database_name'),
+        username: config.get<string>('DB_USERNAME', 'root'),
+        password: config.get<string>('DB_PASSWORD', 'Da1wi2d$'),
+        database: config.get<string>('DB_NAME', 'MININFRA'),
         entities: [Asset], // Add specific entities
         autoLoadEntities: true, // Automatically load all entities
         synchronize: false, // Set true only in development
